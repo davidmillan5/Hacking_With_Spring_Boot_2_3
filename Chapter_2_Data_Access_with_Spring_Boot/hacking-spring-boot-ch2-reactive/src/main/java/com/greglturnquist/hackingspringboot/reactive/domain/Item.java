@@ -8,6 +8,7 @@ import java.util.Objects;
 public class Item {
     private @Id String id;
     private String name;
+    private String description;
     private double price;
 
     private Item() {}
@@ -16,6 +17,13 @@ public class Item {
         this.name = name;
         this.price = price;
     }
+
+    public Item(String name, String description, double price) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+    }
+
     // end::code[]
 
     public String getId() {
@@ -42,23 +50,36 @@ public class Item {
         this.price = price;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
         Item item = (Item) o;
-        return Double.compare(item.price, price) == 0 && Objects.equals(id, item.id) && Objects.equals(name, item.name);
+
+        return Objects.equals(id, item.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, price);
+        return id != null ? id.hashCode() : 0;
     }
 
     @Override
     public String toString() {
-        return "Item{" + "id=" + id + ", name='" + name + '\'' + ", price=" + price + '}';
+        return "Item{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                '}';
     }
 }
