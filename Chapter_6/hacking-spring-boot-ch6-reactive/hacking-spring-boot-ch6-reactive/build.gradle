@@ -1,0 +1,45 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '2.7.14'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id 'org.asciidoctor.jvm.convert' version '3.3.2'
+}
+
+group = 'com.greglturnquist'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '11'
+}
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	set('snippetsDir', file("build/generated-snippets"))
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
+	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation group: 'org.mongodb', name: 'mongodb-driver-sync'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
+	testImplementation 'io.projectreactor:reactor-test'
+	testImplementation 'org.springframework.restdocs:spring-restdocs-webtestclient'
+}
+
+tasks.named('test') {
+	outputs.dir snippetsDir
+	useJUnitPlatform()
+}
+
+tasks.named('asciidoctor') {
+	inputs.dir snippetsDir
+	dependsOn test
+}
